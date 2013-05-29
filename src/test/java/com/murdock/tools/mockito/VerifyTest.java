@@ -55,6 +55,7 @@ public class VerifyTest {
 			try {
 				System.out.print("call list.get " + i + " ");
 				System.out.println(list.get(i));
+				Assert.assertEquals(String.valueOf(i), list.get(i));
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
