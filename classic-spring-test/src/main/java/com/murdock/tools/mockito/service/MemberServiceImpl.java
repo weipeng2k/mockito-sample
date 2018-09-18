@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 
 		Member member = userDAO.findMember(name);
 		if (member != null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("duplicate member.");
 		}
 
 		member = new Member();
