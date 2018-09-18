@@ -10,5 +10,3 @@
 ## 解决方案
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用`JUnit`做单元测试的主体框架，如果有`Spring`的支持，可以使用`spring-test`进行支持，对于层与层之间的Mock，则使用`Mockito`来完成。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在通过测试

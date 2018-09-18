@@ -34,19 +34,19 @@ public class MemberWithoutSpringTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void insertMemberError() {
+	public void insert_member_error() {
 		memberService.insertMember(null, "123");
 
 		memberService.insertMember(null, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void insertExistMember() {
+	public void insert_exist_member() {
 		memberService.insertMember("weipeng", "1234abc");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void insertIllegalArgument() {
+	public void insert_illegal_argument() {
 		memberService
 				.insertMember(
 						"akdjflajsdlfjaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsadfasdfasf",
@@ -54,7 +54,7 @@ public class MemberWithoutSpringTest {
 	}
 
 	@Test
-	public void insertMember() {
+	public void insert_member() {
 		System.out.println(memberService.insertMember("windowsxp", "abc123"));
 		Assert.assertNotNull(memberService.insertMember("windowsxp", "abc123"));
 	}
