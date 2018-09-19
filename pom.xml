@@ -19,6 +19,7 @@
     <modules>
         <module>classic-spring-test</module>
         <module>spring-boot-test</module>
+        <module>mockito-test-case</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -35,6 +36,11 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
                 <version>${mockito-all.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.murdock.tools.mockito</groupId>
+                <artifactId>mockito-test-case</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

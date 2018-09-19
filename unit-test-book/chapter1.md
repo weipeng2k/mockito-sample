@@ -1,6 +1,9 @@
 # 前言
 ## 引言
 
+> "I'm not a great programmer; I'm just a good programmer with great habits."
+> -- Kent Beck
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java单元测试框架在业界非常多，以JUnit为事实上的标准，而JUnit只是解决了单元测试的基本骨干，而对于Mock的支持却没有。而同样，在Mock方面，Java也有很多开源的选择，诸如`JMock`、`EasyMock`和`Mockito`，而`Mockito`也同样为其中的翘楚，二者能够很好的完成单元测试的工作。本文就是介绍如何使用二者来完成单元测试。
 
 ## 存在的问题
@@ -10,3 +13,4 @@
 ## 解决方案
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用`JUnit`做单元测试的主体框架，如果有`Spring`的支持，可以使用`spring-test`进行支持，对于层与层之间的Mock，则使用`Mockito`来完成。
+

@@ -18,7 +18,7 @@ public class MemberServiceImpl implements MemberService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.murdock.tools.mockito.service.MemberService#insertMember(java.lang
+	 * MemberService#insertMember(java.lang
 	 * .String, java.lang.String)
 	 */
 	@Override
