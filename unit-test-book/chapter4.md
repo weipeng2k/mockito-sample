@@ -35,19 +35,6 @@ public class MemberJavaConfigTest {
 
     @Autowired
     private MemberService memberService;
-    @Autowired
-    private UserDAO userDAO;
-
-    /**
-     * 可以选择在测试开始的时候来进行mock的逻辑编写
-     */
-    @Before
-    public void mockUserDAO() {
-        Mockito.when(userDAO.insertMember(Mockito.any())).thenReturn(
-                System.currentTimeMillis());
-
-        ((MemberServiceImpl) memberService).setUserDAO(userDAO);
-    }
 
     @Test
     public void insertMember() {
@@ -59,13 +46,17 @@ public class MemberJavaConfigTest {
     static class MemberServiceConfig {
 
         @Bean
-        public MemberService memberService() {
-            return new MemberServiceImpl();
+        public MemberService memberService(UserDAO userDAO) {
+            MemberServiceImpl memberService =  new MemberServiceImpl();
+            memberService.setUserDAO(userDAO);
+            return memberService;
         }
 
         @Bean
         public UserDAO userDAO() {
-            return Mockito.mock(UserDAO.class);
+            UserDAO mock = Mockito.mock(UserDAO.class);
+            Mockito.when(mock.insertMember(Mockito.any())).thenReturn(System.currentTimeMillis());
+            return mock;
         }
     }
 }
@@ -73,6 +64,6 @@ public class MemberJavaConfigTest {
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以看到只需要有一个类，被注解了`Configuration`，该类就是一个配置类型，而这种**Java Config Style**已经是Spring官方推荐的方式了。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Bean`注解类似xml中的`bean`标签，这里配置了两个Bean一个`MemberService`的实现，另外一个是mock的`UserDAO`。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Bean`注解类似xml中的`bean`标签，这里配置了两个Bean一个`MemberService`的实现，另外一个是mock的`UserDAO`。其中对`MemberService`的配置需要依赖`UserDAO`。
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剩下的测试过程就和之前`classic-spring-test`完全一致了，可以看到新的方式没有了恼人的xml配置，变得更加直接和高效。

@@ -4,7 +4,6 @@ import com.murdock.tools.mockito.dao.UserDAO;
 import com.murdock.tools.mockito.service.MemberService;
 import com.murdock.tools.mockito.service.MemberServiceImpl;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -23,19 +22,6 @@ public class MemberJavaConfigTest {
 
     @Autowired
     private MemberService memberService;
-    @Autowired
-    private UserDAO userDAO;
-
-    /**
-     * 可以选择在测试开始的时候来进行mock的逻辑编写
-     */
-    @Before
-    public void mockUserDAO() {
-        Mockito.when(userDAO.insertMember(Mockito.any())).thenReturn(
-                System.currentTimeMillis());
-
-        ((MemberServiceImpl) memberService).setUserDAO(userDAO);
-    }
 
     @Test
     public void insertMember() {
@@ -47,13 +33,17 @@ public class MemberJavaConfigTest {
     static class MemberServiceConfig {
 
         @Bean
-        public MemberService memberService() {
-            return new MemberServiceImpl();
+        public MemberService memberService(UserDAO userDAO) {
+            MemberServiceImpl memberService =  new MemberServiceImpl();
+            memberService.setUserDAO(userDAO);
+            return memberService;
         }
 
         @Bean
         public UserDAO userDAO() {
-            return Mockito.mock(UserDAO.class);
+            UserDAO mock = Mockito.mock(UserDAO.class);
+            Mockito.when(mock.insertMember(Mockito.any())).thenReturn(System.currentTimeMillis());
+            return mock;
         }
     }
 }

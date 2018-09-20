@@ -66,8 +66,6 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
     public void mockUserDAO() {
         Mockito.when(userDAO.insertMember(Mockito.any())).thenReturn(
                 System.currentTimeMillis());
-
-        ((MemberServiceImpl) memberService).setUserDAO(userDAO);
     }
 
     @Test(expected = IllegalArgumentException.class)

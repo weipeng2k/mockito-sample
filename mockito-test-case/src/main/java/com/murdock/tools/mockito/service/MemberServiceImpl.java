@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.murdock.tools.mockito.service;
 
@@ -8,7 +8,7 @@ import com.murdock.tools.mockito.dao.UserDAO;
 
 /**
  * @author weipeng2k
- * 
+ *
  */
 public class MemberServiceImpl implements MemberService {
 
@@ -16,7 +16,7 @@ public class MemberServiceImpl implements MemberService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * MemberService#insertMember(java.lang
 	 * .String, java.lang.String)

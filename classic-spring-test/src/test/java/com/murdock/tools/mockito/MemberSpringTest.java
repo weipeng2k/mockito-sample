@@ -5,7 +5,6 @@ package com.murdock.tools.mockito;
 
 import com.murdock.tools.mockito.dao.UserDAO;
 import com.murdock.tools.mockito.service.MemberService;
-import com.murdock.tools.mockito.service.MemberServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +32,6 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
     public void mockUserDAO() {
         Mockito.when(userDAO.insertMember(Mockito.any())).thenReturn(
                 System.currentTimeMillis());
-
-        ((MemberServiceImpl) memberService).setUserDAO(userDAO);
     }
 
     @Test(expected = IllegalArgumentException.class)
