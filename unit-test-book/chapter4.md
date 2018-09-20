@@ -24,9 +24,9 @@ public class MemberJavaConfigTest {
 |`RunWith`|该注解是`junit`提供的，表示用那种方式来执行这个测试，这里是`SpringRunner`，由`spring-test`提供|
 |`ContextConfiguration`|对测试的Spring容器的配置，比如：配置的位置等|
 
-### 配置
+### 配置与示例
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过注解可以声明按照何种方式去执行测试，以及测试的Spring容器如何组装，还或缺在Spring容器中如何配置Bean。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过注解可以声明按照何种方式去执行测试，以及测试的Spring容器如何组装，但是还或缺在Spring容器中如何配置Bean，以前这是通过xml来进行配置的。
 
 ```java
 @RunWith(SpringRunner.class)
@@ -37,7 +37,7 @@ public class MemberJavaConfigTest {
     private MemberService memberService;
 
     @Test
-    public void insertMember() {
+    public void insert_member() {
         System.out.println(memberService.insertMember("windowsxp", "abc123"));
         Assert.assertNotNull(memberService.insertMember("windowsxp", "abc123"));
     }

@@ -35,7 +35,7 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void insertMemberError() {
+    public void insert_member_error() {
         memberService.insertMember(null, "123");
 
         memberService.insertMember(null, null);
@@ -45,7 +45,7 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
      * 也可以选择在方法中进行mock
      */
     @Test(expected = IllegalArgumentException.class)
-    public void insertExistMember() {
+    public void insert_exist_member() {
         Member member = new Member();
         member.setName("weipeng");
         member.setPassword("123456abcd");
@@ -55,7 +55,7 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void insertIllegalArgument() {
+    public void insert_illegal_argument() {
         StringBuilder sb = new StringBuilder();
         IntStream.range(0, 32).forEach(sb::append);
 
@@ -63,7 +63,7 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
-    public void insertMember() {
+    public void insert_member() {
         System.out.println(memberService.insertMember("windowsxp", "abc123"));
         Assert.assertNotNull(memberService.insertMember("windowsxp", "abc123"));
     }

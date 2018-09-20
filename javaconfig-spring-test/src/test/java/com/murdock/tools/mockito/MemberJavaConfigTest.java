@@ -24,7 +24,7 @@ public class MemberJavaConfigTest {
     private MemberService memberService;
 
     @Test
-    public void insertMember() {
+    public void insert_member() {
         System.out.println(memberService.insertMember("windowsxp", "abc123"));
         Assert.assertNotNull(memberService.insertMember("windowsxp", "abc123"));
     }
