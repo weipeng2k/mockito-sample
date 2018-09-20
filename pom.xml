@@ -20,6 +20,7 @@
         <module>classic-spring-test</module>
         <module>spring-boot-test</module>
         <module>mockito-test-case</module>
+        <module>javaconfig-spring-test</module>
     </modules>
     <dependencyManagement>
         <dependencies>

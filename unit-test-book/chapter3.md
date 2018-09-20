@@ -1,200 +1,113 @@
-# 使用Mockito进行单元测试
+# 使用Spring-Test来进行单元测试
 
-> 以下例子可以在`mockito-test-case`中找到。
+> 以下例子可以在`classic-spring-test`中找到。
 
-## 使用Mockito进行mock
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spring-test是springframework中一个模块，主要也是由spring作者`Juergen Hoeller`来完成的，它可以方便的测试基于spring的代码。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先看一下怎样使用Mockito进行一个对象的Mock，首先添加依赖：
+## 引入spring-test
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`spring-test`只需要引入依赖就可以完成测试，非常简单。它能够帮助我们启动一个测试的spring容器，完成属性的装配，但是它如何同`Mockito`集成起来是一个问题，我们采用配置的方式进行。
+
+### 加入依赖
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;增加依赖：
+
+> 该版本一般和你使用的spring版本一致
 
 ```xml
 <dependency>
-    <groupId>org.mockito</groupId>
-    <artifactId>mockito-all</artifactId>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-test</artifactId>
+    <scope>test</scope>
 </dependency>
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来尝试对`java.util.List`进行Mock，Mock对于List操作的内容进行构造。
+### 配置
 
-### 构造Mock
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于`Mockito`支持`mock`方法构造，所以我们可以将它通过spring factory bean的形式融入到 spring 的体系中。我们针对`MemberService`进行测试，需要对`UserDAO`进行Mock，我们只需要在配置中配置即可。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先看一下最简的使用方式。
+> 配置在MemberService.xml中，这里需要说明一下 **没有使用共用的配置文件**， 目的就是让大家在测试的时候能够相互独立，而且在一个配置文件中配置的Bean越多，就证明你要测试的类依赖越复杂，也就是越不合理，**逼迫自己做重构**。
 
-```java
-public void mock_one() {
-    List<String> list = Mockito.mock(List.class);
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+       default-autowire="byName">
 
-    Mockito.when(list.get(0)).thenReturn("one");
+    <bean id="memberService" class="com.murdock.tools.mockito.service.MemberServiceImpl"/>
 
-    System.out.println(list.get(0));
-
-    Assert.assertEquals("one", list.get(0));
-}
+    <bean id="userDAO" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg>
+            <value>com.murdock.tools.mockito.dao.UserDAO</value>
+        </constructor-arg>
+    </bean>
+</beans>
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面代码中`Mockito.mock`可以构造一个Mock对象，这个对象没有任何作用，如果调用它的方法，如果有返回值的话，它会返回null。这个时候可以向其中加入mock逻辑，比如：`Mockito.when(xxx.somemethod()).thenReturn(xxx)`，这段逻辑就会在当有外界调用`xxx.somemethod()`时，返回那个在thenReturn中的对象。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在进行spring测试之前，我们必须有一个spring的配置文件，用来构造`applicationContext`，注意上面红色的部分，这个`UserDAO`就是`MemberServiceImpl`需要的，而它利用了spring的`FactoryBean`方式，通过mock工厂方法完成了Mock对象的构造，其中的构造函数表明了这个Mock是什么类型的。只用在配置文件中声明一下就可以了。
 
-### 构造一个复杂的Mock
+## 构造Mock
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有时我们需要针对输入来构造Mock的输出，简单的when和thenReturn无法支持，这时就需要较为复杂的`Answer`。
-
-```java
-@Test(expected = RuntimeException.class)
-public void mock_answer() {
-    List<String> list = Mockito.mock(List.class);
-    Mockito.when(list.get(Mockito.anyInt())).thenAnswer(
-            invocation -> {
-                Object[] args = invocation.getArguments();
-                int index = Integer.parseInt(args[0].toString());
-                // int index = (int) args[0];
-                if (index == 0) {
-                    return "0";
-                } else if (index == 1) {
-                    return "1";
-                } else if (index == 2) {
-                    throw new RuntimeException();
-                } else {
-                    return String.valueOf(index);
-                }
-            });
-
-    Assert.assertEquals("0", list.get(0));
-    Assert.assertEquals("1", list.get(1));
-    list.get(2);
-}
-```
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有时候需要构造复杂的返回逻辑，比如参数为1的时候，返回一个值，为2的时候，返回另一个值。那么when和thenAnswer就可以满足要求。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面代码可以看到当对于List的任意的输入`Mockito.anyInt()`，会进行`Answer`回调的处理，任何针对List的输入都会经过它的处理。这可以让我完成更加柔性和定制化的Mock操作。
-
-## 断言选择
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然我们可以使用System.out.println来完成目测，但是有时候需要让JUnit插件或者maven的surefire插件能够捕获住测试的失败，这个时候就需要使用断言了。我们使用org.junit.Assert来完成断言的判断，可以看到通过简单的assertEquals就可以了，当然该类提供了一系列的assertXxx来完成断言。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用IDEA在进行断言判断时非常简单，比Eclipse要好很多，比如：针对一个`int x`判断它等于0，就可以直接写`x == 0`，然后代码提示生成断言。
-
-## 真实案例
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面我们看一个较为真实的例子，比如：我们有个`MemberService`用来insertMember。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先看一下使用spring-test如何写单元测试：
 
 ```java
-public interface MemberService {
+@ContextConfiguration(locations = {"classpath:MemberService.xml"})
+public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private UserDAO userDAO;
+
     /**
-     * <pre>
-     * 插入一个会员，返回会员的主键
-     * 如果有重复，则会抛出异常
-     * </pre>
-     *
-     * @param name     name不能超过32个字符，不能为空
-     * @param password password不能全部是数字，长度不能低于6，不超过16
-     * @return PK
+     * 可以选择在测试开始的时候来进行mock的逻辑编写
      */
-    Long insertMember(String name, String password) throws IllegalArgumentException;
+    @Before
+    public void mockUserDAO() {
+        Mockito.when(userDAO.insertMember(Mockito.any())).thenReturn(
+                System.currentTimeMillis());
+
+        ((MemberServiceImpl) memberService).setUserDAO(userDAO);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void insertMemberError() {
+        memberService.insertMember(null, "123");
+
+        memberService.insertMember(null, null);
+    }
+
+    /**
+     * 也可以选择在方法中进行mock
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void insertExistMember() {
+        Member member = new Member();
+        member.setName("weipeng");
+        member.setPassword("123456abcd");
+        Mockito.when(userDAO.findMember("weipeng")).thenReturn(member);
+
+        memberService.insertMember("weipeng", "1234abc");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void insertIllegalArgument() {
+        StringBuilder sb = new StringBuilder();
+        IntStream.range(0, 32).forEach(sb::append);
+        
+        memberService.insertMember(sb.toString(), "abcdcsfa123");
+    }
+
+    @Test
+    public void insertMember() {
+        System.out.println(memberService.insertMember("windowsxp", "abc123"));
+        Assert.assertNotNull(memberService.insertMember("windowsxp", "abc123"));
+    }
 }
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其对应的实现。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以看到，通过继承`AbstractJUnit4SpringContextTests`就可以完成构造`applicationContext`的功能。当然通过`ContextConfiguration`指明当前的配置文件所在地，就可以完成`applicationContext`的初始化，同时利用`Autowired`完成配置文件中的Bean的获取。
 
-```java
-public class MemberServiceImpl implements MemberService {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于在`MemberService.xml`中针对`UserDAO`的mock配置，对应的mock对象会被注入到`MemberSpringTest`中，而后续的测试方法就可以针对它来编排mock逻辑。
 
-	private UserDAO userDAO;
-
-	@Override
-	public Long insertMember(String name, String password)
-			throws IllegalArgumentException {
-		if (name == null || password == null) {
-			throw new IllegalArgumentException();
-		}
-
-		if (name.length() > 32 || password.length() < 6
-				|| password.length() > 16) {
-			throw new IllegalArgumentException();
-		}
-
-		boolean pass = false;
-		for (Character c : password.toCharArray()) {
-			if (!Character.isDigit(c)) {
-				pass = true;
-				break;
-			}
-		}
-		if (!pass) {
-			throw new IllegalArgumentException();
-		}
-
-		Member member = userDAO.findMember(name);
-		if (member != null) {
-			throw new IllegalArgumentException("duplicate member.");
-		}
-
-		member = new Member();
-		member.setName(name);
-		member.setPassword(password);
-		Long id = userDAO.insertMember(member);
-
-		return id;
-	}
-
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-
-}
-```
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以看到实现通过聚合了userDAO，来完成操作，而业务层的代码的单元测试代码，就必须隔离UserDAO，也就是说要Mock这个UserDAO。
-	
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面我们就使用Mockito来完成Mock操作。
-
-```java
-public class MemberWithoutSpringTest {
-	private MemberService memberService = new MemberServiceImpl();
-
-	@Before
-	public void mockUserDAO() {
-		UserDAO userDAO = Mockito.mock(UserDAO.class);
-		Member member = new Member();
-		member.setName("weipeng");
-		member.setPassword("123456abcd");
-		Mockito.when(userDAO.findMember("weipeng")).thenReturn(member);
-
-		Mockito.when(userDAO.insertMember((Member) Mockito.any())).thenReturn(
-				System.currentTimeMillis());
-
-		((MemberServiceImpl) memberService).setUserDAO(userDAO);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void insert_member_error() {
-		memberService.insertMember(null, "123");
-
-		memberService.insertMember(null, null);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void insert_exist_member() {
-		memberService.insertMember("weipeng", "1234abc");
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void insert_illegal_argument() {
-		memberService
-				.insertMember(
-						"akdjflajsdlfjaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsadfasdfasf",
-						"abcdcsfa123");
-	}
-
-	@Test
-	public void insert_member() {
-		System.out.println(memberService.insertMember("windowsxp", "abc123"));
-		Assert.assertNotNull(memberService.insertMember("windowsxp", "abc123"));
-	}
-}
-```
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以看到，在测试开始的时候，利用了Before来完成Mock对象的构建，也就是说在test执行之前完成了Mock对象的初始化工作。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但仔细看上述代码中，`MemberService`的实现`MemberServiceImpl`是直接构造出来的，它依赖了实现，但是我们的测试最好不要依赖实现进行测试的。同时`UserDAO`也是硬塞给`MemberService`的实现，这是因为我们常用Spring来装配类之间的关系，而单元测试没有Spring的支持，这就使得测试代码需要硬编码的方式来进行组装。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么我们如何避免这样的强依赖和组装代码的出现呢？结论就是使用spring-test来完成。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们在`Before`逻辑中以及方法中均可以自由的裁剪mock逻辑，这样`JUnit`、`spring-test`和`Mockito`完美的统一到了一起。

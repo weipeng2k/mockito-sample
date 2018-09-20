@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import java.util.stream.IntStream;
+
 /**
  * @author weipeng2k
  */
@@ -57,8 +59,10 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void insertIllegalArgument() {
-        memberService.insertMember(
-                "akdjflajsdlfjaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsadfasdfasf", "abcdcsfa123");
+        StringBuilder sb = new StringBuilder();
+        IntStream.range(0, 32).forEach(sb::append);
+
+        memberService.insertMember(sb.toString(), "abcdcsfa123");
     }
 
     @Test
