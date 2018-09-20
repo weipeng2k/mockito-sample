@@ -51,7 +51,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打开目录下的`index.html`可以看到各个类的覆盖率情况。
 
 <center>
-    <img src="" />
+    <img src="https://raw.githubusercontent.com/weipeng2k/mockito-sample/master/resources/chapter6-1.png" />
 </center>
 
 ## 缺失路径
@@ -59,5 +59,5 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击到对应的`package`中的类，可以查看缺失的测试路径，这样就可以指导哪些分支没有纳入单测。
 
 <center>
-    <img src="" />
+    <img src="https://raw.githubusercontent.com/weipeng2k/mockito-sample/master/resources/chapter6-2.png" />
 </center>
