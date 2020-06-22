@@ -7,13 +7,25 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 /**
  * @author weipeng2k
  */
 public class VerifyTest {
+
+    private static final int TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
+
+    @Test
+    public void get_time() {
+        Random random = new Random();
+        int delta = random.nextInt(TWO_DAYS);
+        Date date = new Date(System.currentTimeMillis() + delta);
+        System.out.println(date);
+    }
 
     @SuppressWarnings("all")
     @Test

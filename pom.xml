@@ -15,6 +15,7 @@
         <mysql.version>5.1.29</mysql.version>
         <spring.boot.version>1.5.12.RELEASE</spring.boot.version>
         <mockito-all.version>1.10.19</mockito-all.version>
+        <jmockdata.version>4.2.0</jmockdata.version>
     </properties>
     <modules>
         <module>classic-spring-test</module>
@@ -42,6 +43,11 @@
                 <groupId>com.murdock.tools.mockito</groupId>
                 <artifactId>mockito-test-case</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jsonzou</groupId>
+                <artifactId>jmockdata</artifactId>
+                <version>${jmockdata.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
