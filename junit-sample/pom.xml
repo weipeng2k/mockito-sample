@@ -9,24 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaconfig-spring-test</artifactId>
-    <name>javaconfig-spring-test</name>
+    <artifactId>junit-sample</artifactId>
+    <name>junit-sample</name>
+    <description>JUnit的Sample</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.murdock.tools.mockito</groupId>
-            <artifactId>mockito-test-case</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

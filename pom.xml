@@ -12,9 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <mysql.version>5.1.29</mysql.version>
-        <spring.boot.version>1.5.12.RELEASE</spring.boot.version>
-        <mockito-all.version>1.10.19</mockito-all.version>
+        <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
         <jmockdata.version>4.2.0</jmockdata.version>
     </properties>
     <modules>
@@ -22,6 +20,7 @@
         <module>spring-boot-test</module>
         <module>mockito-test-case</module>
         <module>javaconfig-spring-test</module>
+        <module>junit-sample</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -34,11 +33,6 @@
                 <scope>import</scope>
             </dependency>
             <!-- Spring Boot BOM: End -->
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>${mockito-all.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.murdock.tools.mockito</groupId>
                 <artifactId>mockito-test-case</artifactId>
@@ -83,7 +77,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>

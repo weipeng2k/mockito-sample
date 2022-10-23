@@ -73,7 +73,7 @@ public void mock_answer() {
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用IDEA在进行断言判断时非常简单，比Eclipse要好很多，比如：针对一个`int x`判断它等于0，就可以直接写`x == 0`，然后代码提示生成断言。
 
-## 真实案例
+## 真实案例
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面我们看一个较为真实的例子，比如：我们有个`MemberService`用来insertMember。
 
