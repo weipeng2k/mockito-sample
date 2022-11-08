@@ -34,7 +34,7 @@ public class StartDB {
             con = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/testdb");
             stmt = con.createStatement();
 
-            String sql = "CREATE TABLE member (\n" +
+            String sql = "CREATE TABLE IF NOT EXISTS member (\n" +
                     "   id INT NOT NULL,\n" +
                     "   name VARCHAR(32) NOT NULL,\n" +
                     "   password VARCHAR(32) NOT NULL,\n" +
@@ -44,6 +44,7 @@ public class StartDB {
                     ");";
             result = stmt.executeUpdate(sql);
             con.commit();
+
 
         }  catch (Exception e) {
             e.printStackTrace(System.out);
