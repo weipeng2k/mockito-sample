@@ -3,7 +3,7 @@
  */
 package com.murdock.tools.mockito.service;
 
-import com.murdock.tools.mockito.Member;
+import com.murdock.tools.mockito.dao.dataobject.MemberDO;
 import com.murdock.tools.mockito.dao.UserDAO;
 
 /**
@@ -44,12 +44,12 @@ public class MemberServiceImpl implements MemberService {
 			throw new IllegalArgumentException();
 		}
 
-		Member member = userDAO.findMember(name);
+		MemberDO member = userDAO.findMember(name);
 		if (member != null) {
 			throw new IllegalArgumentException("duplicate member.");
 		}
 
-		member = new Member();
+		member = new MemberDO();
 		member.setName(name);
 		member.setPassword(password);
 		Long id = userDAO.insertMember(member);

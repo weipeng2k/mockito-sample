@@ -3,6 +3,7 @@
  */
 package com.murdock.tools.mockito;
 
+import com.murdock.tools.mockito.dao.dataobject.MemberDO;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,12 +23,12 @@ public class MemberWithoutSpringTest {
 	@Before
 	public void mockUserDAO() {
 		UserDAO userDAO = Mockito.mock(UserDAO.class);
-		Member member = new Member();
+		MemberDO member = new MemberDO();
 		member.setName("weipeng");
 		member.setPassword("123456abcd");
 		Mockito.when(userDAO.findMember("weipeng")).thenReturn(member);
 
-		Mockito.when(userDAO.insertMember((Member) Mockito.any())).thenReturn(
+		Mockito.when(userDAO.insertMember((MemberDO) Mockito.any())).thenReturn(
 				System.currentTimeMillis());
 
 		((MemberServiceImpl) memberService).setUserDAO(userDAO);

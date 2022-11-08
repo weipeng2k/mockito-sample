@@ -1,15 +1,15 @@
 package com.murdock.tools.mockito.dao;
 
-import com.murdock.tools.mockito.Member;
+import com.murdock.tools.mockito.dao.dataobject.MemberDO;
 
 public interface UserDAO {
 	/**
 	 * 查询会员
 	 * 
-	 * @param memberId
-	 * @return
+	 * @param memberId name
+	 * @return member
 	 */
-	Member findMember(String memberId);
+	MemberDO findMember(String memberId);
 
 	/**
 	 * 插入会员
@@ -17,5 +17,5 @@ public interface UserDAO {
 	 * @param member
 	 * @return
 	 */
-	Long insertMember(Member member);
+	Long insertMember(MemberDO member);
 }

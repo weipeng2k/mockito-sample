@@ -3,6 +3,7 @@
  */
 package com.murdock.tools.mockito;
 
+import com.murdock.tools.mockito.dao.dataobject.MemberDO;
 import com.murdock.tools.mockito.dao.UserDAO;
 import com.murdock.tools.mockito.service.MemberService;
 import org.junit.Assert;
@@ -46,7 +47,7 @@ public class MemberSpringTest extends AbstractJUnit4SpringContextTests {
      */
     @Test(expected = IllegalArgumentException.class)
     public void insert_exist_member() {
-        Member member = new Member();
+        MemberDO member = new MemberDO();
         member.setName("weipeng");
         member.setPassword("123456abcd");
         Mockito.when(userDAO.findMember("weipeng")).thenReturn(member);

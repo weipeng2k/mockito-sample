@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberDAO">
+    <resultMap id="BaseResultMap"
+               type="com.murdock.tools.mockito.dao.dataobject.MemberDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+    </resultMap>
+
+    <sql id="columns">
+        id,
+        gmt_create,
+        gmt_modified,
+        name,
+        password
+    </sql>
+
+    <insert id="insertMember" parameterType="com.murdock.tools.mockito.dao.dataobject.MemberDO">
+        insert into member (
+                           id,
+                           gmt_create,
+                           gmt_modified,
+                           name,
+                           password)
+        values (#{id, jdbcType=BIGINT},
+                #{gmtCreate, jdbcType=DATE},
+                #{gmtModified, jdbcType=DATE},
+                #{name, jdbcType=VARCHAR},
+                #{password, jdbcType=VARCHAR})
+    </insert>
+
+    <select id="queryMember" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+            <include refid="columns" />
+        from member
+        where name=#{name, jdbcType=VARCHAR}
+    </select>
+</mapper>
