@@ -52,10 +52,8 @@ public class SpringBootMemberTest {
     static class Config {
 
         @Bean
-        public MemberService memberService(UserDAO userDAO) {
-            MemberServiceImpl memberService =  new MemberServiceImpl();
-            memberService.setUserDAO(userDAO);
-            return memberService;
+        public MemberService memberService() {
+            return new MemberServiceImpl();
         }
     }
 

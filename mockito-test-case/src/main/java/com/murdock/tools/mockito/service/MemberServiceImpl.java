@@ -5,6 +5,7 @@ package com.murdock.tools.mockito.service;
 
 import com.murdock.tools.mockito.dao.dataobject.MemberDO;
 import com.murdock.tools.mockito.dao.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author weipeng2k
@@ -12,6 +13,7 @@ import com.murdock.tools.mockito.dao.UserDAO;
  */
 public class MemberServiceImpl implements MemberService {
 
+	@Autowired
 	private UserDAO userDAO;
 
 	/*
