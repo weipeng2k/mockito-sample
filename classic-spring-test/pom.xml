@@ -15,6 +15,7 @@
             <groupId>com.murdock.tools.mockito</groupId>
             <artifactId>mockito-test-case</artifactId>
         </dependency>
+        <!--  TEST  -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
