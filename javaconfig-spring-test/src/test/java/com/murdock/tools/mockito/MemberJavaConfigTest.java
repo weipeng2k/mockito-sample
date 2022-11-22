@@ -31,14 +31,10 @@ public class MemberJavaConfigTest {
 
     @Configuration
     static class MemberServiceConfig {
-
         @Bean
-        public MemberService memberService(UserDAO userDAO) {
-            MemberServiceImpl memberService =  new MemberServiceImpl();
-            memberService.setUserDAO(userDAO);
-            return memberService;
+        public MemberService memberService() {
+            return new MemberServiceImpl();
         }
-
         @Bean
         public UserDAO userDAO() {
             UserDAO mock = Mockito.mock(UserDAO.class);
